@@ -42,3 +42,4 @@ else:
 
 finally:
     print("This will always be executed, regardless of whether an exception occurred or not.")
+c
