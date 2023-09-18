@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="C:/Users/Asia/code/SavvyCoders/dap-curriculum/Section07/Resources/SavvyCoders_SQL_chargeDB.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="3007"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><current_table name="4,10:mainEVCharging"/><default_encoding codec=""/><browse_table_settings/></tab_browse><tab_sql><sql name="SQL 1">INSERT into EVRegistry (State, PostalCode, ModelYear, StateID)
+Values('PA',19130,2020,290)
+
+SELECT Make, Model, ModelYear
+FROM evRegistry
+Where VIN like &quot;1N4AZ%&quot;
+
+Select *
+From EVRegistry
+Where VIN like &quot;%GDEE%&quot;
+
+SELECT Make
+FROM EVRegistry
+WHERE  Make is NULL;
+
+SELECT ModelYear, Make, Model, ElectricVehicleType, ElectricRange
+FROM EVRegistry 
+WHERE Make = 'TESLA' 
+ORDER BY Make,  ModelYear DESC
+
+SELECT ModelYear, Make, Model, ElectricVehicleType, ElectricRange
+FROM EVRegistry 
+WHERE Make = 'TESLA' 
+ORDER BY Make,  ModelYear ASC
+LIMIT 10
+
+SELECT Count(Distinct userId) from EVCharging
+
+SELECT userId, COUNT (DISTINCT stationId)
+FROM EVCharging
+Group by userId
+LIMIT 10
+
+SELECT DISTINCT userId, MIN(chargeTimeHrs) as minHours, MAX(chargeTimeHrs) as maxHours FROM EVCharging
+Group by userId
+Order by maxHours DESC;
+
+SELECT &quot;userId&quot;, AVG(&quot;chargeTimeHrs&quot;)
+FROM EVCharging
+GROUP BY &quot;userId&quot;
+ORDER BY AVG(&quot;chargeTimeHrs&quot;) DESC
+
+SELECT DISTINCT locationId, count(locationId) as numStations FROM EVCharging
+Group BY locationId
+ORDER BY numStations DESC
+LIMIT 20;
+
+SELECT userId, ROUND(AVG(&quot;kwhTotal&quot;),2) as avgPOWER from EVCharging
+GROUP BY userId
+
+SELECT locationId, ROUND(SUM(&quot;kwhTotal&quot;),2) as &quot;totalpowerKWH&quot; 
+FROM EVCharging
+GROUP BY locationId
+ORDER BY &quot;totalpowerKWH&quot; DESC
+LIMIT 10
+
+SELECT UserId,Weekday, ROUND(SUM(kwhTotal),2) as 'totalPower'
+FROM EVcharging
+WHERE weekday = 'Wed'
+GROUP BY UserID, weekday
+ORDER BY totalPower DESC
+LIMIT 15;
+
+SELECT stationid, count(stationid)  as uses
+from EVCharging
+Group by stationId
+having uses &gt; 100
+order by uses DESC
+
+SELECT userId, ROUND(SUM(&quot;kwhTotal&quot;),2) as totalPower
+FROM EVCharging
+GROUP BY userid
+HAVING totalPower &gt; 1000
+ORDER BY totalPower DESC
+
+SELECT StationID, Count(*) as numUses
+FROM EVCharging
+GROUP BY StationID 
+HAVING COUNT(*) &gt; 100 
+ORDER BY 2 DESC;
+
+SELECT UserId, ROUND(SUM(kwhTotal),2) as 'totalPower'
+FROM EVcharging
+GROUP BY UserID
+HAVING SUM(kwhTotal) &gt; 1000
+ORDER BY totalPower DESC
+
+SELECT userid, 
+
+
+SELECT dd.dayOfWeek, AVG(fc.chargeTimeHrs) as avgChargeTime
+FROM factCharge as fc
+INNER JOIN dimDay as dd 
+ON fc.dayID = dd.dateKey
+GROUP BY dd.dayOfWeek
+ORDER BY AVG(fc.chargeTimeHrs) DESC;
+
+
+SELECT du.appPlatform, count(fc.chargeTimeHrs) as numCharges
+FROM dimUser as du
+INNER JOIN factCharge as fc
+ON du.userId = fc.userId
+GROUP BY du.appPlatform
+ORDER BY count(fc.chargeTimeHrs) DESC;</sql><sql name="SQL 2">SELECT weekday, round(AVG(chargeTimeHrs),2) as avgChargeTime 
+FROM EVCharging
+Group by weekday
+ORDER by Avg(chargeTimeHrs) DESC
+LIMIT 1;
+
+ -- 2
+SELECT userId, round(AVG(kwhTotal),2) as totalPower 
+FROM EVCharging
+GROUP BY userId
+ORDER BY totalPower DESC
+LIMIT 15;
+
+-- 3
+SELECT df.typeFacility as 'Type of Facility', count(fc.stationId) as 'Number of Stations'
+FROM dimFacility as df
+INNER JOIN factCharge as fc
+ON df.FacilityKey = fc.facilityID
+GROUP BY df.typeFacility
+ORDER BY count(fc.stationId) DESC;
+
+-- 5 
+SELECT userId, MIN(chargeTimeHrs) as minTime, MAX(chargeTimeHrs) as maxTime
+FROM EVCharging
+GROUP BY userId
+HAVING chargeTimeHrs
+ORDER BY 2</sql><current_tab id="1"/></tab_sql></sqlb_project>
